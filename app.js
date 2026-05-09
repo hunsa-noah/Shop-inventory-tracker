@@ -1,58 +1,58 @@
-let tasks = JSON.parse(localStorage.getItem('hunsa-tasks')) || [];
+let products = JSON.parse(localStorage.getItem('hunsa-products')) || [];
 let currentFilter = 'all';
 
-const taskInput = document.getElementById('taskInput');
+const productsInput = document.getElementById('productsInput');
 const addBtn = document.getElementById('addBtn');
-const taskList = document.getElementById('taskList');
-const taskCount = document.getElementById('taskCount');
+const productsList = document.getElementById('productsList');
+const productsCount = document.getElementById('productsCount');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const clearCompletedBtn = document.getElementById('clearCompleted');
 
-function saveTasks() {
-  localStorage.setItem('hunsa-tasks', JSON.stringify(tasks));
+function saveproducts() {
+  localStorage.setItem('hunsa-products', JSON.stringify(products));
 }
 
-function addTask() {
-  const text = taskInput.value.trim();
+function addproducts() {
+  const text = productsInput.value.trim();
   if (text === '') {
     alert('Please enter a task');
     return;
   }
   
-  const task = {
+  const products = {
     id: Date.now(),
     text: text,
     completed: false,
     createdAt: new Date().toISOString()
   };
   
-  tasks.unshift(task);
-  taskInput.value = '';
-  saveTasks();
-  renderTasks();
+  products.unshift(products);
+  productsInput.value = '';
+  saveproducts();
+  renderproducts();
 }
 
-function toggleTask(id) {
-  tasks = tasks.map(task => 
-    task.id === id ? {...task, completed: !task.completed} : task
+function toggleproducts(id) {
+  products = products.map(products => 
+    productsid === id ? {...products, completed: !products.completed} : products
   );
-  saveTasks();
-  renderTasks();
+  saveproducts();
+  renderproducts();
 }
 
-function deleteTask(id) {
-  tasks = tasks.filter(task => task.id !== id);
+function deleteproducts(id) {
+  products = products.filter(products => products.id !== id);
   saveTasks();
   renderTasks();
 }
 
 function clearCompleted() {
-  tasks = tasks.filter(task => !task.completed);
-  saveTasks();
-  renderTasks();
+  products = products.filter(products => !products.completed);
+  saveproductss();
+  renderproducts();
 }
 
-function filterTasks(filter) {
+function filterproducts(filter) {
   currentFilter = filter;
   filterBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === filter);
@@ -60,46 +60,37 @@ function filterTasks(filter) {
   renderTasks();
 }
 
-function getFilteredTasks() {
+function getFilteredproducts() {
   if (currentFilter === 'active') {
-    return tasks.filter(task => !task.completed);
+    return products.filter(products => !products.completed);
   } else if (currentFilter === 'completed') {
-    return tasks.filter(task => task.completed);
+    return products.filter(products => products.completed);
   }
-  return tasks;
+  return products;
 }
 
-function renderTasks() {
-  const filteredTasks = getFilteredTasks();
+function renderproducts() {
+  const filteredproducts = getFilteredTasks();
   
-  if (filteredTasks.length === 0) {
-    taskList.innerHTML = '<div class="empty-state">No tasks here. Add one above! 👆</div>';
+  if (filteredproducts.length === 0) {
+    productsList.innerHTML = '<div class="empty-state">No tasks here. Add one above! 👆</div>';
   } else {
-    taskList.innerHTML = filteredTasks.map(task => `
-      <li class="task-item ${task.completed ? 'completed' : ''}">
-        <input 
-          type="checkbox" 
-          class="task-checkbox" 
-          ${task.completed ? 'checked' : ''}
-          onchange="toggleTask(${task.id})"
-        >
-        <span class="task-text">${task.text}</span>
-        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
-      </li>
+    productsList.innerHTML = filteredproducts.map(products => `
+     
     `).join('');
   }
   
-  const activeCount = tasks.filter(task => !task.completed).length;
-  taskCount.textContent = `${activeCount} task${activeCount !== 1 ? 's' : ''} left`;
+  const activeCount = products.filter(products => !products.completed).length;
+  productsCount.textContent = `${activeCount} products${activeCount !== 1 ? 's' : ''} left`;
 }
 
-addBtn.addEventListener('click', addTask);
-taskInput.addEventListener('keypress', (e) => {
+addBtn.addEventListener('click', addproducts);
+productsInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') addTask();
 });
 clearCompletedBtn.addEventListener('click', clearCompleted);
 filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => filterTasks(btn.dataset.filter));
+  btn.addEventListener('click', () => filterproducts(btn.dataset.filter));
 });
 
-renderTasks();
+renderproducts();
